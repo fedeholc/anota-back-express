@@ -14,9 +14,13 @@ console.log("Connected to PlanetScale!");
 
 app.get("/", function (req, res) {
   connection.execute("SELECT * FROM `todotest1`", (err, results, fields) => {
-    console.log(results); // results contains rows returned by server
     //console.log(fields); // fields contains extra meta data about results, if available
-    res.json(results);
+    if (!err) {
+      res.status(200).json(results);
+    } else {
+      console.error(err); // results contains rows returned by server
+      res.status(400).send(err);
+    }
   });
 });
 
@@ -25,9 +29,16 @@ app.post("/", function (req, res) {
     "INSERT INTO `todotest1` VALUES(?,?)",
     [req.body.id, req.body.tarea],
     (err, results, fields) => {
-      console.log("resultados:", results, results.insertId);
-      //res.json(results);
-      res.status(200).send("listo!");
+      if (!err) {
+        console.log("resultados:", results, results.insertId);
+
+        //?FIXME: tengo que devolver el insertId?
+        //? conviene que el Id sea autoinc o mejor generar uno propio y ya saberlo?
+
+        res.status(201).send("listo!");
+      } else {
+        res.status(400).send(err);
+      }
     }
   );
 });
@@ -37,28 +48,33 @@ app.put("/", function (req, res) {
     "UPDATE `todotest1` SET id = ?, tarea = ? WHERE id = ?",
     [req.body.id, req.body.tarea, req.body.id],
     (err, results, fields) => {
-      console.log("resultados:", results, results.insertId);
-      //res.json(results);
-      res.status(200).send("listo!");
+      if (!err) {
+        console.log("resultados:", results, results.affectedRows);
+
+        //? FIXME: si affectedRows es cero (como cuando se pasa mal el Id)
+        //? debería devolver error? devolver ese valor?
+
+        res.status(201).send("listo!");
+      } else {
+        res.status(400).send(err);
+      }
     }
   );
 });
 
 app.delete("/del/:Id", function (req, res) {
-  //console.log(req.body);
   connection.execute(
     "DELETE FROM `todotest1` WHERE id = ?",
     [req.params.Id],
     (err, results, fields) => {
-      console.log("resultados:", results, err, fields);
-      //res.json(results);
-      res.status(200).send("listo!");
+      if (!err) {
+        console.log("resultados:", results, err, fields);
+        res.status(204).send("listo!");
+      } else {
+        res.status(400).send(err);
+      }
     }
   );
-});
-
-app.get("/api", function (req, res) {
-  res.json({ bla: "api" });
 });
 
 app.use(function (req, res) {
