@@ -78,14 +78,14 @@ app.delete("/del/:Id", function (req, res) {
 });
 
 app.use(function (req, res) {
-  res.status(404).json({ error: "error 404" });
+  res.status(404).send("error 404");
 });
 
-/* app.listen(3001, function () {
+app.listen(3001, function () {
   console.log("app started.");
 });
- */
 
-http.createServer(app).listen(3001, function () {
+/* http.createServer(app).listen(3001, function () {
   console.log("Guestbook app started.");
 });
+ */
