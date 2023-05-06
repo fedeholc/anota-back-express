@@ -35,7 +35,7 @@ app.post("/", function (req, res) {
         //?FIXME: tengo que devolver el insertId?
         //? conviene que el Id sea autoinc o mejor generar uno propio y ya saberlo?
 
-        res.status(201).send("listo!");
+        res.status(201).send("OK");
       } else {
         res.status(400).send(err);
       }
@@ -54,7 +54,7 @@ app.put("/", function (req, res) {
         //? FIXME: si affectedRows es cero (como cuando se pasa mal el Id)
         //? debería devolver error? devolver ese valor?
 
-        res.status(201).send("listo!");
+        res.status(201).send("OK");
       } else {
         res.status(400).send(err);
       }
@@ -69,7 +69,7 @@ app.delete("/del/:Id", function (req, res) {
     (err, results, fields) => {
       if (!err) {
         console.log("resultados:", results, err, fields);
-        res.status(204).send("listo!");
+        res.status(204).send("OK");
       } else {
         res.status(400).send(err);
       }
