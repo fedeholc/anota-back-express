@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { createConnection } from "mysql2";
 import dotenv from "dotenv";
-
+import http from "http";
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -81,6 +81,11 @@ app.use(function (req, res) {
   res.status(404).json({ error: "error 404" });
 });
 
-app.listen(3001, function () {
+/* app.listen(3001, function () {
   console.log("app started.");
+});
+ */
+
+http.createServer(app).listen(3001, function () {
+  console.log("Guestbook app started.");
 });
