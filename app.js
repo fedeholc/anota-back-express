@@ -2,11 +2,13 @@ import express from "express";
 import bodyParser from "body-parser";
 import { createConnection } from "mysql2";
 import dotenv from "dotenv";
+import cors from "cors";
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3004;
 
- var app = express();
+var app = express();
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
