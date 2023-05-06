@@ -2,8 +2,10 @@ import express from "express";
 import bodyParser from "body-parser";
 import { createConnection } from "mysql2";
 import dotenv from "dotenv";
-import http from "http";
-var app = express();
+
+const port = process.env.PORT || 3001;
+
+ var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -81,7 +83,7 @@ app.use(function (req, res) {
   res.status(404).send("error 404");
 });
 
-app.listen(3001, function () {
+app.listen(port, function () {
   console.log("app started.");
 });
 
