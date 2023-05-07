@@ -4,7 +4,7 @@ import { createConnection } from "mysql2";
 import dotenv from "dotenv";
 import cors from "cors";
 
-const port = process.env.PORT || 3021;
+const port = process.env.PORT || 3024;
 
 var app = express();
 
@@ -38,8 +38,7 @@ app.post("/", function (req, res) {
 
         //?FIXME: tengo que devolver el insertId?
         //? conviene que el Id sea autoinc o mejor generar uno propio y ya saberlo?
-/*         res.statusMessage = "hola";
- */        res.status(201).send(results.insertId);
+        res.status(201).send(results.insertId.toString());
       } else {
         res.status(400).send(err);
       }
