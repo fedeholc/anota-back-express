@@ -4,7 +4,7 @@ import { createConnection } from "mysql2";
 import dotenv from "dotenv";
 import cors from "cors";
 
-const port = process.env.PORT || 3024;
+const port = process.env.PORT || 3025;
 
 var app = express();
 
