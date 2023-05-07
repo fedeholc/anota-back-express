@@ -4,20 +4,22 @@ import { createConnection } from "mysql2";
 import dotenv from "dotenv";
 import cors from "cors";
 
-const port = process.env.PORT || 3025;
+const PORT = process.env.PORT || 3025;
+const TABLE_NAME = "notas1";
 
-var app = express();
+dotenv.config();
+
+const connection = createConnection(process.env.DATABASE_URL);
+console.log("Connected to PlanetScale!");
+
+const app = express();
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-dotenv.config();
-const connection = createConnection(process.env.DATABASE_URL);
-console.log("Connected to PlanetScale!");
-
 app.get("/", function (req, res) {
-  connection.execute("SELECT * FROM `todotest1`", (err, results, fields) => {
+  connection.execute(`SELECT * FROM ${TABLE_NAME}`, (err, results, fields) => {
     //console.log(fields); // fields contains extra meta data about results, if available
     if (!err) {
       res.status(200).json(results);
@@ -30,16 +32,11 @@ app.get("/", function (req, res) {
 
 app.post("/", function (req, res) {
   connection.execute(
-    "INSERT INTO `todotest1` VALUES(?,?)",
+    `INSERT INTO ${TABLE_NAME} VALUES(?,?)`,
     [req.body.id, req.body.tarea],
     (err, results, fields) => {
       if (!err) {
-        console.log("resultados:", results, results.insertId);
-
-        //?FIXME: tengo que devolver el insertId?
-        //? conviene que el Id sea autoinc o mejor generar uno propio y ya saberlo?
-        res.status(201).json({id: results.insertId});
-
+         res.status(201).send("ok1");
       } else {
         res.status(400).send(err);
       }
@@ -49,7 +46,7 @@ app.post("/", function (req, res) {
 
 app.put("/", function (req, res) {
   connection.execute(
-    "UPDATE `todotest1` SET id = ?, tarea = ? WHERE id = ?",
+    `UPDATE ${TABLE_NAME} SET id = ?, tarea = ? WHERE id = ?`,
     [req.body.id, req.body.tarea, req.body.id],
     (err, results, fields) => {
       if (!err) {
@@ -68,7 +65,7 @@ app.put("/", function (req, res) {
 
 app.delete("/del/:Id", function (req, res) {
   connection.execute(
-    "DELETE FROM `todotest1` WHERE id = ?",
+    `DELETE FROM ${TABLE_NAME} WHERE id = ?`,
     [req.params.Id],
     (err, results, fields) => {
       if (!err) {
@@ -85,7 +82,7 @@ app.use(function (req, res) {
   res.status(404).send("error 404");
 });
 
-app.listen(port, function () {
+app.listen(PORT, function () {
   console.log("app started.");
 });
 
