@@ -7,7 +7,7 @@ import cors from "cors";
 const PORT = process.env.PORT || 3025;
 const TABLE_NAME = "notas1";
 
-dotenv.config();
+dotenv.config(); //
 
 const connection = createConnection(process.env.DATABASE_URL);
 console.log("Connected to PlanetScale!");
