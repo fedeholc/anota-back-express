@@ -38,7 +38,8 @@ app.post("/", function (req, res) {
 
         //?FIXME: tengo que devolver el insertId?
         //? conviene que el Id sea autoinc o mejor generar uno propio y ya saberlo?
-        res.status(201).send(results.insertId.toString());
+        res.status(201).json({id: results.insertId});
+
       } else {
         res.status(400).send(err);
       }
