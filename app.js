@@ -7,6 +7,8 @@ import cors from "cors";
 const PORT = process.env.PORT || 3025;
 const TABLE_NAME = "notas1";
 
+//TODO: hay que poner también los nombres de los campos acá como constantes
+
 dotenv.config(); //
 
 const connection = createConnection(process.env.DATABASE_URL);
@@ -33,7 +35,7 @@ app.get("/", function (req, res) {
 app.post("/", function (req, res) {
   connection.execute(
     `INSERT INTO ${TABLE_NAME} VALUES(?,?)`,
-    [req.body.id, req.body.tarea],
+    [req.body.id, req.body.note],
     (err, results, fields) => {
       if (!err) {
          res.status(201).send("ok1");
@@ -46,8 +48,8 @@ app.post("/", function (req, res) {
 
 app.put("/", function (req, res) {
   connection.execute(
-    `UPDATE ${TABLE_NAME} SET id = ?, tarea = ? WHERE id = ?`,
-    [req.body.id, req.body.tarea, req.body.id],
+    `UPDATE ${TABLE_NAME} SET id = ?, note = ? WHERE id = ?`,
+    [req.body.id, req.body.note, req.body.id],
     (err, results, fields) => {
       if (!err) {
         console.log("resultados:", results, results.affectedRows);
