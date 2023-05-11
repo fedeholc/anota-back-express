@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 const PORT = process.env.PORT || 3025;
-const TABLE_NAME = "notas1";
+const TABLE_NAME = "note3";
 
 dotenv.config();
 
@@ -18,6 +18,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// TODO: Poner todos los campos en la consulta SQL
+// TODO: pasar la consulta a una variable
 app.get("/", function (req, res) {
   connection.execute(`SELECT * FROM ${TABLE_NAME}`, (err, results, fields) => {
     //console.log(fields); // fields contains extra meta data about results, if available
@@ -30,13 +32,15 @@ app.get("/", function (req, res) {
   });
 });
 
+// TODO: Poner todos los campos en la consulta SQL
+// TODO: pasar la consulta a una variable
 app.post("/", function (req, res) {
+  console.log("body:", req.body);
   connection.execute(
-    `INSERT INTO ${TABLE_NAME} VALUES(?,?)`,
-    [req.body.id, req.body.tarea],
+    `INSERT INTO ${TABLE_NAME} (id, noteText, noteHTML) VALUES ( '${req.body.id}', '${req.body.noteText}', '${req.body.noteHTML}')`,
     (err, results, fields) => {
       if (!err) {
-         res.status(201).send("ok1");
+        res.status(201).send("ok1");
       } else {
         res.status(400).send(err);
       }
@@ -44,10 +48,12 @@ app.post("/", function (req, res) {
   );
 });
 
+// TODO: Poner todos los campos en la consulta SQL
+// TODO: pasar la consulta a una variable
 app.put("/", function (req, res) {
   connection.execute(
-    `UPDATE ${TABLE_NAME} SET id = ?, tarea = ? WHERE id = ?`,
-    [req.body.id, req.body.tarea, req.body.id],
+    `UPDATE ${TABLE_NAME} SET id = '${req.body.id}', noteText = '${req.body.noteText}', noteHTML = '${req.body.noteHTML}' WHERE id = '${req.body.id}'`,
+
     (err, results, fields) => {
       if (!err) {
         console.log("resultados:", results, results.affectedRows);
@@ -63,6 +69,7 @@ app.put("/", function (req, res) {
   );
 });
 
+// TODO: pasar la consulta a una variable
 app.delete("/del/:Id", function (req, res) {
   connection.execute(
     `DELETE FROM ${TABLE_NAME} WHERE id = ?`,
