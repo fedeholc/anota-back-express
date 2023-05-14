@@ -66,7 +66,18 @@ app.post("/", function (req, res) {
 app.put("/", function (req, res) {
   connection.execute(
     `UPDATE ${TABLE_NAME} SET id = '${req.body.id}', 
-    noteText = '${req.body.noteText}', noteHTML = '${req.body.noteHTML}' WHERE id = '${req.body.id}'`,
+    noteText = '${req.body.noteText}', 
+    noteHTML = '${req.body.noteHTML}', 
+    noteTitle = '${req.body.noteTitle}',
+    tags = '${req.body.tags}',
+    category = '${req.body.category}',
+    deleted = ${req.body.deleted},
+    archived = ${req.body.archived},
+    reminder = '${req.body.reminder}',
+    rating = ${req.body.rating},
+    created = '${req.body.created}',
+    modified = '${req.body.modified}'
+    WHERE id = '${req.body.id}'`,
 
     (err, results, fields) => {
       if (!err) {
