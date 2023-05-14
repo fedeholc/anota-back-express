@@ -36,12 +36,20 @@ app.get("/", function (req, res) {
 // TODO: pasar la consulta a una variable
 app.post("/", function (req, res) {
   let postQuery = `INSERT INTO ${TABLE_NAME} 
-    (id, noteText, noteHTML, noteTitle) 
+    (id, noteText, noteHTML, noteTitle, tags, category, deleted, archived, reminder, rating, created, modified) 
     VALUES (
       '${req.body.id}', 
       '${req.body.noteText}', 
       '${req.body.noteHTML}',
-      '${req.body.noteTitle}'
+      '${req.body.noteTitle}',
+      '${req.body.tags}',
+      '${req.body.category}',
+      ${req.body.deleted},
+      ${req.body.archived},
+      '${req.body.reminder}',
+      ${req.body.rating},
+      '${req.body.created}',
+      '${req.body.modified}'
     )`;
 
   connection.execute(postQuery, (err, results, fields) => {
