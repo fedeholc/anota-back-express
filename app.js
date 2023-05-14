@@ -35,24 +35,30 @@ app.get("/", function (req, res) {
 // TODO: Poner todos los campos en la consulta SQL
 // TODO: pasar la consulta a una variable
 app.post("/", function (req, res) {
-  console.log("body:", req.body);
-  connection.execute(
-    `INSERT INTO ${TABLE_NAME} (id, noteText, noteHTML) VALUES ( '${req.body.id}', '${req.body.noteText}', '${req.body.noteHTML}')`,
-    (err, results, fields) => {
-      if (!err) {
-        res.status(201).send("ok1");
-      } else {
-        res.status(400).send(err);
-      }
+  let postQuery = `INSERT INTO ${TABLE_NAME} 
+    (id, noteText, noteHTML, noteTitle) 
+    VALUES (
+      '${req.body.id}', 
+      '${req.body.noteText}', 
+      '${req.body.noteHTML}',
+      '${req.body.noteTitle}'
+    )`;
+
+  connection.execute(postQuery, (err, results, fields) => {
+    if (!err) {
+      res.status(201).send("ok1");
+    } else {
+      res.status(400).send(err);
     }
-  );
+  });
 });
 
 // TODO: Poner todos los campos en la consulta SQL
 // TODO: pasar la consulta a una variable
 app.put("/", function (req, res) {
   connection.execute(
-    `UPDATE ${TABLE_NAME} SET id = '${req.body.id}', noteText = '${req.body.noteText}', noteHTML = '${req.body.noteHTML}' WHERE id = '${req.body.id}'`,
+    `UPDATE ${TABLE_NAME} SET id = '${req.body.id}', 
+    noteText = '${req.body.noteText}', noteHTML = '${req.body.noteHTML}' WHERE id = '${req.body.id}'`,
 
     (err, results, fields) => {
       if (!err) {
