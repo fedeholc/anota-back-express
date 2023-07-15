@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 
 
-*ignore*.md
+*fede_gitignore*
 
 ### Node ###
 # Logs
@@ -146,3 +146,4 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 test.http
+anotes-back-express.code-workspace
