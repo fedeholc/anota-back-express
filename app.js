@@ -38,7 +38,7 @@ app.post("/", function (req, res) {
     [req.body.id, req.body.note],
     (err, results, fields) => {
       if (!err) {
-         res.status(201).send("ok1");
+        res.status(201).send("ok1");
       } else {
         res.status(400).send(err);
       }
@@ -85,10 +85,5 @@ app.use(function (req, res) {
 });
 
 app.listen(PORT, function () {
-  console.log("app started.");
+  console.log(`app started on port ${PORT}`);
 });
-
-/* http.createServer(app).listen(3001, function () {
-  console.log("Guestbook app started.");
-});
- */
