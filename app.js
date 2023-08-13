@@ -5,11 +5,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 const PORT = process.env.PORT || 3025;
-const TABLE_NAME = "notas1";
+const TABLE_NAME = "note3";
 
-//TODO: hay que poner también los nombres de los campos acá como constantes
-
-dotenv.config(); //
+dotenv.config();
 
 const connection = createConnection(process.env.DATABASE_URL);
 console.log("Connected to PlanetScale!");
@@ -20,6 +18,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// TODO: Poner todos los campos en la consulta SQL
+// TODO: pasar la consulta a una variable
 app.get("/", function (req, res) {
   connection.execute(`SELECT * FROM ${TABLE_NAME}`, (err, results, fields) => {
     //console.log(fields); // fields contains extra meta data about results, if available
@@ -32,24 +32,53 @@ app.get("/", function (req, res) {
   });
 });
 
+// TODO: Poner todos los campos en la consulta SQL
+// TODO: pasar la consulta a una variable
 app.post("/", function (req, res) {
-  connection.execute(
-    `INSERT INTO ${TABLE_NAME} VALUES(?,?)`,
-    [req.body.id, req.body.note],
-    (err, results, fields) => {
-      if (!err) {
-        res.status(201).send("ok1");
-      } else {
-        res.status(400).send(err);
-      }
+  let postQuery = `INSERT INTO ${TABLE_NAME} 
+    (id, noteText, noteHTML, noteTitle, tags, category, deleted, archived, reminder, rating, created, modified) 
+    VALUES (
+      '${req.body.id}', 
+      '${req.body.noteText}', 
+      '${req.body.noteHTML}',
+      '${req.body.noteTitle}',
+      '${req.body.tags}',
+      '${req.body.category}',
+      ${req.body.deleted},
+      ${req.body.archived},
+      '${req.body.reminder}',
+      ${req.body.rating},
+      '${req.body.created}',
+      '${req.body.modified}'
+    )`;
+
+  connection.execute(postQuery, (err, results, fields) => {
+    if (!err) {
+      res.status(201).send("ok1");
+    } else {
+      res.status(400).send(err);
     }
-  );
+  });
 });
 
+// TODO: Poner todos los campos en la consulta SQL
+// TODO: pasar la consulta a una variable
 app.put("/", function (req, res) {
   connection.execute(
-    `UPDATE ${TABLE_NAME} SET id = ?, note = ? WHERE id = ?`,
-    [req.body.id, req.body.note, req.body.id],
+    `UPDATE ${TABLE_NAME} SET id = '${req.body.id}', 
+    noteText = '${req.body.noteText}', 
+    noteHTML = '${req.body.noteHTML}', 
+    noteTitle = '${req.body.noteTitle}',
+    tags = '${req.body.tags}',
+    category = '${req.body.category}',
+    deleted = ${req.body.deleted},
+    archived = ${req.body.archived},
+    reminder = '${req.body.reminder}',
+    rating = ${req.body.rating},
+    created = '${req.body.created}',
+    modified = '${req.body.modified}'
+    WHERE id = '${req.body.id}'`,
+
     (err, results, fields) => {
       if (!err) {
         console.log("resultados:", results, results.affectedRows);
@@ -65,6 +94,7 @@ app.put("/", function (req, res) {
   );
 });
 
+// TODO: pasar la consulta a una variable
 app.delete("/del/:Id", function (req, res) {
   connection.execute(
     `DELETE FROM ${TABLE_NAME} WHERE id = ?`,
