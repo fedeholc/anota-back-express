@@ -15,6 +15,7 @@ console.log("Connected to PlanetScale!");
 const app = express();
 
 app.use(cors());
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -39,9 +40,9 @@ app.post("/", function (req, res) {
     (id, noteText, noteHTML, noteTitle, tags, category, deleted, archived, reminder, rating, created, modified) 
     VALUES (
       '${req.body.id}', 
-      '${req.body.noteText}', 
-      '${req.body.noteHTML}',
-      '${req.body.noteTitle}',
+      '${escaparComillasSimples(req.body.noteText)}', 
+      '${escaparComillasSimples(req.body.noteHTML)}',
+      '${escaparComillasSimples(req.body.noteTitle)}',
       '${req.body.tags}',
       '${req.body.category}',
       ${req.body.deleted},
@@ -66,9 +67,9 @@ app.post("/", function (req, res) {
 app.put("/", function (req, res) {
   connection.execute(
     `UPDATE ${TABLE_NAME} SET id = '${req.body.id}', 
-    noteText = '${req.body.noteText}', 
-    noteHTML = '${req.body.noteHTML}', 
-    noteTitle = '${req.body.noteTitle}',
+    noteText = '${escaparComillasSimples(req.body.noteText)}', 
+    noteHTML = '${escaparComillasSimples(req.body.noteHTML)}', 
+    noteTitle = '${escaparComillasSimples(req.body.noteTitle)}',
     tags = '${req.body.tags}',
     category = '${req.body.category}',
     deleted = ${req.body.deleted},
@@ -117,3 +118,8 @@ app.use(function (req, res) {
 app.listen(PORT, function () {
   console.log(`app started on port ${PORT}`);
 });
+
+function escaparComillasSimples(texto) {
+  // Reemplazar cada comilla simple con dos comillas simples
+  return texto.replace(/'/g, "''");
+}
