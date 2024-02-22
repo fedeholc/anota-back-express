@@ -3,14 +3,22 @@ import bodyParser from "body-parser";
 import { createConnection } from "mysql2";
 import dotenv from "dotenv";
 import cors from "cors";
+import { createClient } from "@libsql/client";
 
 const PORT = process.env.PORT || 3025;
-const TABLE_NAME = "note3";
+/* const TABLE_NAME = "note3"; */
+const TABLE_NAME = "note";
 
 dotenv.config();
 
-const connection = createConnection(process.env.DATABASE_URL);
-console.log("Connected to PlanetScale!");
+console.log("url", process.env.TURSO_URL, process.env.DATABASE_URL);
+const tursoClient = createClient({
+  url: process.env.TURSO_URL || "",
+  authToken: process.env.TURSO_TOKEN || "",
+});
+
+/* const connection = createConnection(process.env.DATABASE_URL);
+console.log("Connected to PlanetScale!"); */
 
 const app = express();
 
@@ -21,16 +29,33 @@ app.use(bodyParser.json());
 
 // TODO: Poner todos los campos en la consulta SQL
 // TODO: pasar la consulta a una variable
-app.get("/", function (req, res) {
+/* app.get("/", function (req, res) {
   connection.execute(`SELECT * FROM ${TABLE_NAME}`, (err, results, fields) => {
     //console.log(fields); // fields contains extra meta data about results, if available
-    if (!err) {
+  if (!err) {
       res.status(200).json(results);
     } else {
       console.error(err); // results contains rows returned by server
       res.status(400).send(err);
     }
   });
+}); */
+
+app.get("/", async function (req, res) {
+  try {
+    let results = await tursoClient.execute("SELECT * FROM note");
+    console.log("res:", results);
+    res.status(200).json(results.rows);
+  } catch (err) {
+    console.log("eeeeeeer", err);
+    res.status(400).send(err);
+  }
+  /*  if (!err) {
+    res.status(200).json(results);
+  } else {
+    console.error(err); // results contains rows returned by server
+    res.status(400).send(err);
+  } */
 });
 
 // TODO: Poner todos los campos en la consulta SQL
