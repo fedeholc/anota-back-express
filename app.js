@@ -41,6 +41,18 @@ app.use(bodyParser.json());
   });
 }); */
 
+app.get("/get/:usuario", async function (req, res) {
+  try {
+    let results = await tursoClient.execute(
+      `SELECT * FROM note where usuario = '${req.params.usuario}'`
+    );
+    res.status(200).json(results.rows);
+  } catch (err) {
+    console.log("Get Error: ", err);
+    res.status(400).send(err);
+  }
+});
+
 app.get("/", async function (req, res) {
   try {
     let results = await tursoClient.execute("SELECT * FROM note");
@@ -82,7 +94,7 @@ app.get("/", async function (req, res) {
 app.post("/", async function (req, res) {
   try {
     let query = `INSERT INTO ${TABLE_NAME} 
-    (id, noteText, noteHTML, noteTitle, tags, category, deleted, archived, reminder, rating, created, modified) 
+    (id, noteText, noteHTML, noteTitle, tags, category, deleted, archived, reminder, rating, created, modified, usuario) 
     VALUES (
       '${req.body.id}', 
       '${escaparComillasSimples(req.body.noteText)}', 
@@ -95,7 +107,8 @@ app.post("/", async function (req, res) {
       '${req.body.reminder}',
       ${req.body.rating},
       '${req.body.created}',
-      '${req.body.modified}'
+      '${req.body.modified}',
+      '${req.body.usuario}'
     )`;
 
     let results = await tursoClient.execute(query);
@@ -140,6 +153,7 @@ app.post("/", async function (req, res) {
 }); */
 
 app.put("/", async function (req, res) {
+  //console.log("REQ:", req.body);
   try {
     let query = `UPDATE ${TABLE_NAME} SET id = '${req.body.id}', 
     noteText = '${escaparComillasSimples(req.body.noteText)}', 
@@ -152,7 +166,8 @@ app.put("/", async function (req, res) {
     reminder = '${req.body.reminder}',
     rating = ${req.body.rating},
     created = '${req.body.created}',
-    modified = '${req.body.modified}'
+    modified = '${req.body.modified}',
+    usuario = '${req.body.usuario}'
     WHERE id = '${req.body.id}'`;
 
     let results = await tursoClient.execute(query);
